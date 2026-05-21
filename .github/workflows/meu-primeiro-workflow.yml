@@ -1,0 +1,17 @@
+name: Primeiro Workflow LinuxTips
+
+on: 
+  push:
+    branches:  
+      - main
+
+jobs:
+  giropops:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confere versão do Ubuntu
+        run: cat /etc/os-release
+
+
+      - name: Exibir uma mensagem
+        run: echo "Estou fazendo o curso de GitHub Actions da LinuxTips"
