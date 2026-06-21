@@ -46,4 +46,18 @@ Criando Container com Redis: https://docs.github.com/pt/actions/tutorials/use-co
 
 Code Scanning com CodeQL: https://docs.github.com/pt/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql
 
+# Códigos dos Workflows Terraform
+
+Template que chama os outros workflows: https://github.com/FabioBartoli/linuxtips-terraform-reusable/blob/main/.github/workflows/template.yml
+
+Workflow do Terraform Plan: https://github.com/FabioBartoli/linuxtips-terraform-reusable/blob/main/.github/workflows/terraform-plan.yml
+
+Workflow do Terraform Apply: https://github.com/FabioBartoli/linuxtips-terraform-reusable/blob/main/.github/workflows/terraform-apply.yml
+
+Workflow que gera o Plano de Destruição: https://github.com/FabioBartoli/linuxtips-terraform-reusable/blob/main/.github/workflows/terraform-destroy.yml
+
+Workflow que Aplica o Destroy: https://github.com/FabioBartoli/linuxtips-terraform-reusable/blob/main/.github/workflows/terraform-destroy-apply.yml
+
+Exemplo de como fica o Workflow "Chamador": https://github.com/FabioBartoli/linuxtips-terraform-eks/blob/main/.github/workflows/iac.yml
+
 # Vaiiiii !!!!!!
