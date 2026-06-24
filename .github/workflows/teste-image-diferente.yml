@@ -1,0 +1,11 @@
+name: Teste de usar imagem diferente - mac
+
+on:
+  push:
+
+jobs:
+  teste1:
+    runs-on: macos-26
+    steps:
+      - name: exibe mensagem
+        run: echo "Teste com image do mac"
