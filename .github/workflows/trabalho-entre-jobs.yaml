@@ -1,4 +1,4 @@
-name: Vendo arquivos compartilhados entre Steps
+name: Trabalho entre Jobs
 
 on:
   workflow_dispatch:
