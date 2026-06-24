@@ -1,0 +1,22 @@
+name: Trabalho entre Job
+
+on:
+  workflow_dispatch:
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confere versao do Ubuntu
+        run: cat /etc/os-release
+      
+      - name: Exibir uma mensagem
+        run: echo "Estou fazendo o curso de Github Actions da Linuxtips" > mensagem.txt
+
+  job2:
+    runs-on: ubuntu-latest
+      - name: Qualquer outra coisa
+        run: ls -lha
+
+      - name: Le conteudo do arquivo
+        run: cat mensagem.txt
