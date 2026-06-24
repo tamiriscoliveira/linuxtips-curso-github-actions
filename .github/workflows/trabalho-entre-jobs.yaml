@@ -1,23 +1,28 @@
-name: Trabalho entre Job
+name: Vendo arquivos compartilhados entre Steps
 
 on:
   workflow_dispatch:
 
 jobs:
-  job1:
+  job_1:
     runs-on: ubuntu-latest
     steps:
       - name: Confere versao do Ubuntu
         run: cat /etc/os-release
       
       - name: Exibir uma mensagem
-        run: echo "Estou fazendo o curso de Github Actions da Linuxtips" > mensagem.txt
+        run: echo "Estou fazendo o curso de Github Actions da Linuxtips" > ${{ github.workspace }}/mensagem.txt
 
-  job2:
+
+  job_2:
     runs-on: ubuntu-latest
-     steps:
-      - name: Qualquer outra coisa
+    needs: job_1
+    steps:
+      - name: Ver o conteudo do diretorio
         run: ls -lha
 
-      - name: Le conteudo do arquivo
+      - name: Ver o conteudo do diretorio
+        run: ls -lha
+
+      - name: Acessa arquivo mensagem
         run: cat mensagem.txt
