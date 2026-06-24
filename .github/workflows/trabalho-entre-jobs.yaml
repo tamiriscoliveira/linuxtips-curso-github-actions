@@ -1,4 +1,4 @@
-ame: Trabalho entre Job
+Name: Trabalho entre Job
 
 on:
   workflow_dispatch:
