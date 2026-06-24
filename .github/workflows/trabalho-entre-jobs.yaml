@@ -15,6 +15,7 @@ jobs:
 
   job2:
     runs-on: ubuntu-latest
+     steps:
       - name: Qualquer outra coisa
         run: ls -lha
 
