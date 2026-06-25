@@ -24,6 +24,6 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Baixa a imagem do Container
-      run: |
-        docker pull ${{ github.event.inputs.baixandoaimage }}
+      - name: Baixa a imagem do Container
+        run: |
+          docker pull ${{ github.event.inputs.baixandoaimage }}
