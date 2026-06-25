@@ -30,4 +30,4 @@ jobs:
 
       - name: Baixa a imagem do Container
         run: |
-          docker pull ${{ github.event.inputs.baixandoaimage }}
+          docker pull ${{ github.event.inputs.informaraImage }}
