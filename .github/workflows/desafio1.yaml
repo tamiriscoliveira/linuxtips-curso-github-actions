@@ -2,7 +2,7 @@ name: workflow do desafio  1
 
 on:
   workflow_dispatch:
-    input:
+    inputs:
         informaraImage:
             required: false
             type: string
