@@ -5,8 +5,8 @@ on:
     branches:
         - main
 
-job-1:
-    build-app:
+job1:
+    buildapp:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
