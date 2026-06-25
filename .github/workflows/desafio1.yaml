@@ -1,11 +1,12 @@
-name: Desafio 1
+name: workflow do desafio  1
 
 on:
   workflow_dispatch:
-    input:
+    inputs:
         informaraImage:
             required: true
             type: string
+            default: 'nginx:latest'
             description: 'Necessário informar a image para o pull'
 
 
@@ -23,6 +24,21 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: baixa a image 
+      - name: verificando versão do docker
         run: |
-             docker pull ${{github.event.inputs.baixandoaimage}}
+          docker version
+
+      - name: Baixa a imagem do Container
+        run: |
+          docker pull ${{ github.event.inputs.informaraImage }}
+      
+      - name: Verifica a image
+        run: |
+          docker images 
+
+      - name: Scan com o Docker Scout
+        uses: docker/scout-action@v1
+        with:
+          command: quickview,cves,recommendations,sbom
+          image: ${{ github.event.inputs.informaraImage }}
+          only-severities: critical,high
