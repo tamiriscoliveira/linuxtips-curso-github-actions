@@ -1,0 +1,28 @@
+name: Desafio 1
+
+on:
+  workflow_dispatch:
+    input:
+        informaraImage:
+            required: true
+            type: string
+            description: 'Necessário informar a image para o pull'
+
+
+jobs:
+  baixandoaimage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout - ação para baixar o conteudo do repositório
+        uses: actions/checkout@v4
+      
+      - name: Login no Docker
+        uses:  docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: baixa a image 
+        run: |
+             docker pull ${{github.event.inputs.baixandoaimage}}
