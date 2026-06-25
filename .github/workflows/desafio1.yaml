@@ -24,6 +24,10 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: verificando versão do docker
+        run: |
+          docker version
+
       - name: Baixa a imagem do Container
         run: |
           docker pull ${{ github.event.inputs.baixandoaimage }}
