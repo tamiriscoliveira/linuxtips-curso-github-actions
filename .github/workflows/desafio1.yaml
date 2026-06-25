@@ -6,6 +6,7 @@ on:
         informaraImage:
             required: false
             type: string
+            default: 'nginx:latest'
             description: 'Necessário informar a image para o pull'
 
 
