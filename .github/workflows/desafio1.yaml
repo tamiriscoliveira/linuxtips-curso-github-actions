@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
         informaraImage:
-            required: false
+            required: true
             type: string
             default: 'nginx:latest'
             description: 'Necessário informar a image para o pull'
