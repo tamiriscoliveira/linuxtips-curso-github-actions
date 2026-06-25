@@ -35,3 +35,10 @@ jobs:
       - name: Verifica a image
         run: |
           docker images 
+
+      - name: Scan com o Docker Scout
+        uses: docker/scout-action@v1
+        with:
+          command: quickview,cves,recommendations,sbom
+          image: ${{ github.event.inputs.informaraImage }}
+          only-severities: critical,high
