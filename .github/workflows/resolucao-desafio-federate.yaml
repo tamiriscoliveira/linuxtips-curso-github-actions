@@ -1,0 +1,16 @@
+name: resolucao desafio 1
+
+on:
+  push:
+    branches:
+        - main
+
+job-1:
+    build-app:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            
+            - name: Instalar dependencias
+              run: npm install
