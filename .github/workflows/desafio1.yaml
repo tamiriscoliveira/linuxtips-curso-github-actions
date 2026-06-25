@@ -31,3 +31,7 @@ jobs:
       - name: Baixa a imagem do Container
         run: |
           docker pull ${{ github.event.inputs.informaraImage }}
+      
+      - name: Verifica a image
+        run: |
+          docker images ls
