@@ -34,4 +34,4 @@ jobs:
       
       - name: Verifica a image
         run: |
-          docker images ls
+          docker images 
