@@ -25,4 +25,4 @@ jobs:
 
       - name: baixa a image 
         run: |
-             docker pull ${{github.event.inputs.baixandoaimage}}
+             docker pull ${{ github.event.inputs.baixandoaimage }}
