@@ -5,7 +5,7 @@ on:
     branches:
         - main
 
-job1:
+jobs:
     buildapp:
         runs-on: ubuntu-latest
         steps:
