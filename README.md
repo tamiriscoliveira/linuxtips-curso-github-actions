@@ -64,4 +64,4 @@ Workflow que Aplica o Destroy: https://github.com/FabioBartoli/linuxtips-terrafo
 
 Exemplo de como fica o Workflow "Chamador": https://github.com/FabioBartoli/linuxtips-terraform-eks/blob/main/.github/workflows/iac.yml
 
-# V@iiiii !!!!!!
+# Vaiiiii !!!!!!
