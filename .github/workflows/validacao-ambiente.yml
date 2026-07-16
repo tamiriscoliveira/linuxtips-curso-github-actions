@@ -1,5 +1,0 @@
-name: Validando Ambiente
-
-on:
-  workflow_dispatch:
-
