@@ -1,40 +1,44 @@
-name: Validacao de Imagens de Container
+name: workflow do desafio  1
 
 on:
   workflow_dispatch:
-    inputs: #passando argumentos para execução do workflow
-      validaImagemDocker:
-        description: 'Validação da imagem escolhida pelo usuário'
-        required: false
-        default: 'nginx:latest'
-        type: string
+    inputs:
+        informaraImage:
+            required: true
+            type: string
+            default: 'nginx:latest'
+            description: 'Necessário informar a image para o pull'
+
 
 jobs:
-  pipeline-seguranca:
+  baixandoaimage:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout - ação para baixar o conteudo do repositório
         uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      
+      - name: Login no Docker
+        uses:  docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: verificando versão do docker
+        run: |
+          docker version
+
       - name: Baixa a imagem do Container
         run: |
-          docker pull ${{ github.event.inputs.validaImagemDocker }}
-
-      - name: Leitura da imagem
+          docker pull ${{ github.event.inputs.informaraImage }}
+      
+      - name: Verifica a image
         run: |
-          IMAGE_NAME=$(echo "${{ github.event.inputs.validaImagemDocker }}" | cut -d ':' -f 1)
-          docker images | grep $IMAGE_NAME
+          docker images 
 
       - name: Scan com o Docker Scout
         uses: docker/scout-action@v1
         with:
           command: quickview,cves,recommendations,sbom
-          image: ${{ github.event.inputs.validaImagemDocker }}
+          image: ${{ github.event.inputs.informaraImage }}
           only-severities: critical,high

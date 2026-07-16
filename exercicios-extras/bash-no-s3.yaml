@@ -1,16 +1,16 @@
 name: Executar Script Bash e Enviar para S3
 
 on:
-  #workflow_dispatch:
-   schedule:
-     - cron: "0 16 * * 5" # Toda sexta-feira às 12h UTC
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 12 * * 5" # Toda sexta-feira às 12h UTC
 
 jobs:
   job-upload:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v4   # <--- IMPORTANTE!
+        uses: actions/checkout@v4   # <--- IMPORTANTE! O actions/checkout@v4 no primeiro job para que o Actions baixe o repositório (caso o script esteja no repo).
 
       - name: Verifica hostname
         run: cat /etc/hostname
