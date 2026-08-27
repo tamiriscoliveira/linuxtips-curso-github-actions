@@ -1,0 +1,29 @@
+name: Setup Node project
+description: Configura o Node.js e instala as dependências de um projeto npm
+
+inputs:
+  node-version:
+    description: Versão do Node.js
+    required: false
+    default: "20"
+  working-directory:
+    description: Diretório do projeto npm
+    required: true
+  lock-file:
+    description: Caminho do package-lock.json usado pelo cache
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+        cache-dependency-path: ${{ inputs.lock-file }}
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npm ci

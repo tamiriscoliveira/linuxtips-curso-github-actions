@@ -1,0 +1,63 @@
+name: Read OpenAPI metadata
+description: Lê título, versão e repositório de um documento OpenAPI
+
+inputs:
+  openapi-file:
+    description: Caminho do documento OpenAPI
+    required: true
+  repository-field:
+    description: Campo YAML que contém o nome do repositório
+    required: false
+    default: ""
+  yq-version:
+    description: Versão do yq usada para ler o documento
+    required: false
+    default: v4.47.1
+
+outputs:
+  title:
+    description: Título da API
+    value: ${{ steps.metadata.outputs.title }}
+  version:
+    description: Versão da API
+    value: ${{ steps.metadata.outputs.version }}
+  repository:
+    description: Nome do repositório
+    value: ${{ steps.metadata.outputs.repository }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install yq
+      shell: bash
+      env:
+        YQ_VERSION: ${{ inputs.yq-version }}
+      run: |
+        sudo curl --fail --location --silent --show-error \
+          "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
+          --output /usr/local/bin/yq
+        sudo chmod +x /usr/local/bin/yq
+
+    - name: Read metadata
+      id: metadata
+      shell: bash
+      env:
+        OPENAPI_FILE: ${{ inputs.openapi-file }}
+        REPOSITORY_FIELD: ${{ inputs.repository-field }}
+      run: |
+        set -euo pipefail
+
+        title=$(yq -r '.info.title' "$OPENAPI_FILE")
+        version=$(yq -r '.info.version' "$OPENAPI_FILE")
+
+        if [[ -n "$REPOSITORY_FIELD" ]]; then
+          repository=$(yq -r "$REPOSITORY_FIELD" "$OPENAPI_FILE")
+        else
+          repository=${GITHUB_REPOSITORY##*/}
+        fi
+
+        {
+          echo "title=$title"
+          echo "version=$version"
+          echo "repository=$repository"
+        } >> "$GITHUB_OUTPUT"
