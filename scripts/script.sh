@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 # script.sh
+set -euo pipefail
 
-echo "=== Resultado do Script ===" > resultado.csv
-echo "Data de execução: $(date '+%Y-%m-%d %H:%M:%S')" >> resultado.csv
-echo "Hostname: $(hostname)" >> resultado.csv
-echo "Usuário atual: $(whoami)" >> resultado.csv
-echo "Diretório atual: $(pwd)" >> resultado.csv
-echo "-----------------------------" >> resultado.csv
+ARQUIVO="resultado.csv"
 
-echo "Arquivo resultado.txt criado com sucesso!"
+data_execucao=$(date '+%Y-%m-%d %H:%M:%S')
+nome_host=$(hostname)
+usuario_atual=$(whoami)
+diretorio_atual=$(pwd)
+
+{
+  echo "=== Resultado do Script ==="
+  echo "Data de execução: ${data_execucao}"
+  echo "Hostname: ${nome_host}"
+  echo "Usuário atual: ${usuario_atual}"
+  echo "Diretório atual: ${diretorio_atual}"
+  echo "-----------------------------"
+} > "${ARQUIVO}"
+
+echo "Arquivo ${ARQUIVO} criado com sucesso!"

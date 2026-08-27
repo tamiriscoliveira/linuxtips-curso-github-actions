@@ -15,17 +15,22 @@ jobs:
 
       - name: Instalar yq
         run: |
-          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          set -euo pipefail
+          sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
           sudo chmod +x /usr/local/bin/yq
           yq --version
 
       - name: Read OpenAPI metadata
         run: |
-          echo "TITLE=$(yq '.info.title' openapi.yaml)" >> $GITHUB_ENV
-          echo "VERSION=$(yq '.info.version' openapi.yaml)" >> $GITHUB_ENV
-
-          # nome real do repositório vindo do GitHub
-          echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+          set -euo pipefail
+          title=$(yq -e '.info.title' openapi.yaml)
+          version=$(yq -e '.info.version' openapi.yaml)
+          {
+            echo "TITLE=${title}"
+            echo "VERSION=${version}"
+            # nome real do repositório vindo do GitHub
+            echo "REPO_NAME=${GITHUB_REPOSITORY##*/}"
+          } >> "$GITHUB_ENV"
 
       - name: Mostrar valores
         run: |

@@ -18,10 +18,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Quality Gate Tests
+        env:
+          COBERTURA: ${{ needs.build.outputs.test-cobertura }}
+          COBERTURA_MINIMA: '80'
         run: |
-          echo "Cobertura mínima: 80%"
-          echo "Cobertura obtida: ${{ needs.build.outputs.test-cobertura }}%"
-          if (( ${{ needs.build.outputs.test-cobertura }} < 80 )); then
+          set -euo pipefail
+          if [[ -z "${COBERTURA}" ]]; then
+            echo "::error::O job 'build' não publicou a cobertura (output vazio)"
+            exit 1
+          fi
+          if ! [[ "${COBERTURA}" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+            echo "::error::Cobertura inválida recebida do job 'build': '${COBERTURA}'"
+            exit 1
+          fi
+          echo "Cobertura mínima: ${COBERTURA_MINIMA}%"
+          echo "Cobertura obtida: ${COBERTURA}%"
+          if ! awk -v obtida="${COBERTURA}" -v minima="${COBERTURA_MINIMA}" 'BEGIN { exit !(obtida + 0 >= minima + 0) }'; then
             echo "::error::Build reprovado por baixa cobertura"
             exit 1
           fi

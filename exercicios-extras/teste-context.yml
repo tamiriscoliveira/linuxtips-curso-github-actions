@@ -5,10 +5,11 @@ on:
 
 jobs: 
   dump_context:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     steps:
       - name: pega informação do RNNNER
         run: |
-           echo "Pega informações sobre a maquina que esta executando o workflow: ${{ github.runner }}"
+          set -euo pipefail
+          echo "Runner: ${{ runner.name }} | OS: ${{ runner.os }} | Arquitetura: ${{ runner.arch }}"
 
       

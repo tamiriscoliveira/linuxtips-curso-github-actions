@@ -1,7 +1,7 @@
 name: Verifica ambiente
 
 on:
-    worflow_dispatch:
+    workflow_dispatch:
         inputs:
           ambiente:  
             required: true
@@ -12,6 +12,6 @@ jobs:
     verifica-ambiente:
         name: Verifica Ambiente
         runs-on: ubuntu-latest
-        step: 
+        steps:
           - name: mostra valor
             run: echo "O ambiente é ${{ inputs.ambiente}}"
