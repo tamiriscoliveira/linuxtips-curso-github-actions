@@ -6,6 +6,9 @@ on:
 env:
   NOME_DO_CURSO: GITHUB_ACTIONS
 
+permissions:
+  contents: read
+
 jobs:
   valida-ambiente-prd:
     env: 

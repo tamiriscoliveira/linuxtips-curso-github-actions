@@ -5,6 +5,9 @@ on:
   # schedule:
   #   - cron: "0 12 * * 5" # Toda sexta-feira às 12h UTC
 
+permissions:
+  contents: read
+
 jobs:
   job-upload:
     runs-on: ubuntu-latest

@@ -2,6 +2,9 @@ name: Teste de ID
 
 on: workflow_dispatch
 
+permissions:
+  contents: read
+
 jobs:
   build: # JOB ID = build
     runs-on: ubuntu-latest
@@ -18,10 +21,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Quality Gate Tests
+        env:
+          COBERTURA: ${{ needs.build.outputs.test-cobertura }}
         run: |
           echo "Cobertura mínima: 80%"
-          echo "Cobertura obtida: ${{ needs.build.outputs.test-cobertura }}%"
-          if (( ${{ needs.build.outputs.test-cobertura }} < 80 )); then
+          echo "Cobertura obtida: ${COBERTURA}%"
+          if ! [[ "$COBERTURA" =~ ^[0-9]+$ ]]; then
+            echo "::error::Valor de cobertura inválido: $COBERTURA"
+            exit 1
+          fi
+          if [ "$COBERTURA" -lt 80 ]; then
             echo "::error::Build reprovado por baixa cobertura"
             exit 1
           fi

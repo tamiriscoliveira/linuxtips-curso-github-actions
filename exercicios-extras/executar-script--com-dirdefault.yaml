@@ -5,6 +5,9 @@ on:
    schedule:
      - cron: "00 12 * * 6" # Toda sexta-feira às 12h UTC
 
+permissions:
+  contents: read
+
 jobs:
   job-executor-scripts:
     runs-on: ubuntu-latest

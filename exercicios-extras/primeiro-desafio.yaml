@@ -9,6 +9,9 @@ on:
         default: 'nginx:latest'
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   pipeline-seguranca:
     runs-on: ubuntu-latest
@@ -24,13 +27,17 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Baixa a imagem do Container
+        env:
+          IMAGE: ${{ inputs.validaImagemDocker }}
         run: |
-          docker pull ${{ github.event.inputs.validaImagemDocker }}
+          docker pull "$IMAGE"
 
       - name: Leitura da imagem
+        env:
+          IMAGE: ${{ inputs.validaImagemDocker }}
         run: |
-          IMAGE_NAME=$(echo "${{ github.event.inputs.validaImagemDocker }}" | cut -d ':' -f 1)
-          docker images | grep $IMAGE_NAME
+          IMAGE_NAME=$(echo "$IMAGE" | cut -d ':' -f 1)
+          docker images | grep "$IMAGE_NAME"
 
       - name: Scan com o Docker Scout
         uses: docker/scout-action@v1

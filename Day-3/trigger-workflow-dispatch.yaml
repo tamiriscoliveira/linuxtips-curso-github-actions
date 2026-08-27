@@ -12,9 +12,14 @@ on:
           - "17"
           - "18"
 
+permissions:
+  contents: read
+
 jobs:
   install-npm:
     runs-on: ubuntu-latest
     steps:
       - name: Install npm
-        run: npm install ${{ github.event.inputs.node-version }}
+        env:
+          NODE_VERSION: ${{ inputs.node-version }}
+        run: npm install "$NODE_VERSION"

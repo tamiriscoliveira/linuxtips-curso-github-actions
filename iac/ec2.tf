@@ -4,6 +4,15 @@ resource "aws_instance" "web" {
 
   variavel_inexistente = var.variavel_inexistente
 
+  # Exige IMDSv2, evitando roubo de credenciais da instance role via SSRF
+  metadata_options {
+    http_tokens = "required"
+  }
+
+  root_block_device {
+    encrypted = true
+  }
+
   tags = {
     Name = "HelloWorld"
   }
