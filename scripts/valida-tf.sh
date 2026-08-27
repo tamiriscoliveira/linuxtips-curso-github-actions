@@ -2,6 +2,11 @@
 set -euo pipefail
 
 ## CONFIGURAÇÃO DO TERRAFORM
+if ! [[ "${TERRAFORM_VERSION:-}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "::error::TERRAFORM_VERSION invalida ou nao definida"
+  exit 1
+fi
+
 DOWNLOAD_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
 
 echo "Instalando Terraform ${TERRAFORM_VERSION}..."
@@ -16,7 +21,11 @@ echo "::group::Terraform initialization"
 terraform init -backend=false
 echo "::endgroup::"
 
-echo "::add-mask::${AWS_ACCESS_KEY_ID:-LINUXTIPSTRIGUSGIRUS}"
+# Mascara a credencial no log apenas quando ela existe de fato.
+# Nunca use um valor real (ou de exemplo) hardcoded aqui.
+if [ -n "${AWS_ACCESS_KEY_ID:-}" ]; then
+  echo "::add-mask::${AWS_ACCESS_KEY_ID}"
+fi
 
 if terraform validate -no-color; then
   echo "::notice::Terraform validation succeeded"

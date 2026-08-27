@@ -10,6 +10,9 @@ on:
         type: choice
         options: [staging, production]
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -103,4 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print image
-        run: echo "Deploying ${{ needs.docker.outputs.image }} to ${{ inputs.environment }}"
+        env:
+          IMAGE: ${{ needs.docker.outputs.image }}
+          AMBIENTE: ${{ inputs.environment }}
+        run: echo "Deploying $IMAGE to $AMBIENTE"

@@ -9,6 +9,8 @@ on:
             default: 'nginx:latest'
             description: 'Necessário informar a image para o pull'
 
+permissions:
+  contents: read
 
 jobs:
   baixandoaimage:
@@ -29,8 +31,10 @@ jobs:
           docker version
 
       - name: Baixa a imagem do Container
+        env:
+          IMAGE: ${{ inputs.informaraImage }}
         run: |
-          docker pull ${{ github.event.inputs.informaraImage }}
+          docker pull "$IMAGE"
       
       - name: Verifica a image
         run: |

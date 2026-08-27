@@ -3,6 +3,9 @@ name: Pipeline de Testes dos Arquivos Terraform
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   testa-terraform:
     runs-on: ubuntu-latest

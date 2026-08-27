@@ -3,6 +3,9 @@ name: Trabalhando entre jobs
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   job_1:
     runs-on: ubuntu-latest
