@@ -1,0 +1,29 @@
+name: Validação de ambiente compartilhada
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Ambiente configurado no repositório
+        required: true
+        type: string
+      day-of-week:
+        description: Dia da semana exibido pela validação
+        required: true
+        type: string
+      day-of-month:
+        description: Dia do mês exibido pela validação
+        required: true
+        type: string
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      DIA_DA_SEMANA: ${{ inputs.day-of-week }}
+      DIA_MES: ${{ inputs.day-of-month }}
+      NOME_DO_CURSO: GITHUB_ACTIONS
+    steps:
+      - name: Printa valor
+        run: echo "Estou no ambiente ${{ vars.AMBIENTE }} e hoje é dia ${{ env.DIA_MES }}, ${{ env.DIA_DA_SEMANA }} e estou no curso ${{ env.NOME_DO_CURSO }}"
