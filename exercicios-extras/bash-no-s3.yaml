@@ -22,7 +22,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bash-upload
-          path: script.sh            # <--- caminho relativo ao repo
+          path: scripts/script.sh            # <--- caminho relativo ao repo
 
   job-download:
     runs-on: ubuntu-latest
@@ -55,4 +55,9 @@ jobs:
 
       - name: Enviar arquivo para S3
         run: |
-          aws s3 cp resultado.txt s3://aula-terraform-tamiris/desafio-teamcard/resultado-$(date +%Y-%m-%d).txt
+          set -euo pipefail
+          if [[ ! -f resultado.csv ]]; then
+            echo "::error::resultado.csv não foi gerado pelo script; nada a enviar para o S3"
+            exit 1
+          fi
+          aws s3 cp resultado.csv "s3://aula-terraform-tamiris/desafio-teamcard/resultado-$(date +%Y-%m-%d).csv"

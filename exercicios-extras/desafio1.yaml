@@ -29,8 +29,11 @@ jobs:
           docker version
 
       - name: Baixa a imagem do Container
+        env:
+          IMAGEM: ${{ inputs.informaraImage }}
         run: |
-          docker pull ${{ github.event.inputs.informaraImage }}
+          set -euo pipefail
+          docker pull "$IMAGEM"
       
       - name: Verifica a image
         run: |

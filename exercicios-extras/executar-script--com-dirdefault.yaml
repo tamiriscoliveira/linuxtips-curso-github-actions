@@ -57,4 +57,9 @@ jobs:
 
       - name: Enviar arquivo para S3
         run: |
-          aws s3 cp bash-upload/resultado.csv s3://aula-terraform-tamiris/desafio-teamcard/resultado-$(date +%Y-%m-%d).csv
+          set -euo pipefail
+          if [[ ! -f bash-upload/resultado.csv ]]; then
+            echo "::error::bash-upload/resultado.csv não encontrado após o download do artifact"
+            exit 1
+          fi
+          aws s3 cp bash-upload/resultado.csv "s3://aula-terraform-tamiris/desafio-teamcard/resultado-$(date +%Y-%m-%d).csv"

@@ -1,19 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+: "${TERRAFORM_VERSION:?TERRAFORM_VERSION não definido (configure a variable TERRAFORM_VERSION no repositório)}"
+: "${GITHUB_OUTPUT:?GITHUB_OUTPUT não definido; este script deve ser executado dentro do GitHub Actions}"
+
 ## CONFIGURAÇÃO DO TERRAFORM
 DOWNLOAD_URL="https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
 
 echo "Instalando Terraform ${TERRAFORM_VERSION}..."
-curl -sfL "$DOWNLOAD_URL" -o /tmp/terraform.zip
-unzip -q /tmp/terraform.zip -d ~/bin && export PATH="$HOME/bin:$PATH"
+mkdir -p "$HOME/bin"
+
+if ! curl -sfL "$DOWNLOAD_URL" -o /tmp/terraform.zip; then
+  echo "::error::Falha ao baixar o Terraform ${TERRAFORM_VERSION} de ${DOWNLOAD_URL}"
+  exit 1
+fi
+
+if ! unzip -q -o /tmp/terraform.zip -d "$HOME/bin"; then
+  echo "::error::Falha ao extrair o binário do Terraform"
+  exit 1
+fi
+export PATH="$HOME/bin:$PATH"
 
 ##########
 
 cd ./iac/
 
 echo "::group::Terraform initialization"
-terraform init -backend=false
+if ! terraform init -backend=false; then
+  echo "::error::Falha no 'terraform init'"
+  echo "tf_result=failure" >> "$GITHUB_OUTPUT"
+  echo "::endgroup::"
+  exit 1
+fi
 echo "::endgroup::"
 
 echo "::add-mask::${AWS_ACCESS_KEY_ID:-LINUXTIPSTRIGUSGIRUS}"

@@ -54,8 +54,29 @@ jobs:
         id: test
         working-directory: app
         run: |
+          set -euo pipefail
           npm test
-          echo "coverage=$(jq .total.lines.pct report.json)" >> "$GITHUB_OUTPUT"
+          if [[ ! -f report.json ]]; then
+            echo "::error::report.json não foi gerado pelos testes; não é possível apurar a cobertura"
+            exit 1
+          fi
+          coverage=$(jq -e -r '.total.lines.pct' report.json)
+          if [[ -z "$coverage" || "$coverage" == "null" ]]; then
+            echo "::error::Não foi possível ler '.total.lines.pct' de report.json"
+            exit 1
+          fi
+          echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
+      - name: Quality gate de cobertura
+        env:
+          COVERAGE: ${{ steps.test.outputs.coverage }}
+          COBERTURA_MINIMA: '80'
+        run: |
+          set -euo pipefail
+          echo "Cobertura obtida: ${COVERAGE}% (mínimo: ${COBERTURA_MINIMA}%)"
+          if ! awk -v obtida="$COVERAGE" -v minima="$COBERTURA_MINIMA" 'BEGIN { exit !(obtida + 0 >= minima + 0) }'; then
+            echo "::error::Cobertura de ${COVERAGE}% abaixo do mínimo de ${COBERTURA_MINIMA}%"
+            exit 1
+          fi
     outputs:
       coverage: ${{ steps.test.outputs.coverage }}
 
@@ -64,7 +85,6 @@ jobs:
       contents: read
       packages: write
     needs: unit
-    if: ${{ needs.unit.outputs.coverage >= 80 }}
     runs-on: ubuntu-latest
     env:
       GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -86,6 +106,7 @@ jobs:
       - name: Build and Push Docker Image      
         id: build_push
         run: |
+          set -euo pipefail
           repo_lc=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')
           image="ghcr.io/${repo_lc}/api:${GITHUB_SHA}"
           docker build \

@@ -24,13 +24,23 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Baixa a imagem do Container
+        env:
+          IMAGEM: ${{ inputs.validaImagemDocker }}
         run: |
-          docker pull ${{ github.event.inputs.validaImagemDocker }}
+          set -euo pipefail
+          docker pull "$IMAGEM"
 
       - name: Leitura da imagem
+        env:
+          IMAGEM: ${{ inputs.validaImagemDocker }}
         run: |
-          IMAGE_NAME=$(echo "${{ github.event.inputs.validaImagemDocker }}" | cut -d ':' -f 1)
-          docker images | grep $IMAGE_NAME
+          set -euo pipefail
+          IMAGE_NAME="${IMAGEM%%:*}"
+          if ! docker images --format '{{.Repository}}' | grep -Fxq "$IMAGE_NAME"; then
+            echo "::error::Imagem '${IMAGE_NAME}' não encontrada localmente após o pull"
+            exit 1
+          fi
+          docker images
 
       - name: Scan com o Docker Scout
         uses: docker/scout-action@v1
