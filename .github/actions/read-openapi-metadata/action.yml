@@ -45,11 +45,13 @@ runs:
         OPENAPI_FILE: ${{ inputs.openapi-file }}
         REPOSITORY_FIELD: ${{ inputs.repository-field }}
       run: |
-        title=$(yq --raw-output '.info.title' "$OPENAPI_FILE")
-        version=$(yq --raw-output '.info.version' "$OPENAPI_FILE")
+        set -euo pipefail
+
+        title=$(yq -r '.info.title' "$OPENAPI_FILE")
+        version=$(yq -r '.info.version' "$OPENAPI_FILE")
 
         if [[ -n "$REPOSITORY_FIELD" ]]; then
-          repository=$(yq --raw-output "$REPOSITORY_FIELD" "$OPENAPI_FILE")
+          repository=$(yq -r "$REPOSITORY_FIELD" "$OPENAPI_FILE")
         else
           repository=${GITHUB_REPOSITORY##*/}
         fi
