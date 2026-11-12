@@ -1,0 +1,16 @@
+name: Primeiro Workflow linuxtips
+
+on:
+  push:
+    branches:
+      - main
+     
+jobs:    
+  linuxtips:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confere versão do ubuntu
+        run: cat /etc/os-release
+
+      - name: exibir uma mensagem
+        run: echo "Hello World !!!"  
